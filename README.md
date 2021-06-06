@@ -6,4 +6,4 @@ I belive you can use these outside of the QGIS terminal, you just need to import
 
 BBox should be ready to go for any one.
 
-The other two scripts are specilized to my usaes, hopefully someone finds them helpful
+The other two scripts are specilized to my uses, hopefully someone finds them helpful
