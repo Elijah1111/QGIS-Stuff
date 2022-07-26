@@ -5,32 +5,41 @@ from a directory
 I use this script almost every time I make a map
 '''
 import glob, os
-import numpy 
 
 # Define path to  directory of your csv files
-path_to_csv = "/home/emt/Documents/work/Geo/data/ukr/"#TODO Add a path to a dir  
-clipData = False#should we clip the data to map extents?
+path_to_csv = "/PATH/TO/DATA/FOLDER/"#TODO Add a path to a dir  
+clipData = True#should we clip the data to map extents?
+boat = False #Using Boat Rules? This is a VBD standard on my end
 
-style = "/home/emt/Documents/work/Geo/Heat_style.qml"#TODO this is to load a style when you load in the layer
-#change if you need/want it
+style = "DEFAULTSTYLE"#TODO this is to load a style when you load in the layer
+tmpStyle = "/tmp/tmp.qml"#where to save the tmp stylesheet for clipping extents
 
-def mapExtent():
+def trimExtent():
+    lines=[]
+    with open(style,'r') as f:
+        lines=f.readlines()
+    
     extent = iface.mapCanvas().extent()
-    print(extent)
     n = 2 #rounding point
     x1 = round(extent.xMinimum(),n)
     x2 = round(extent.xMaximum(),n)
     y1 = round(extent.yMinimum(),n)
     y2 = round(extent.yMaximum(),n)
-    print(f"EOG: {x1},{y1},{x2},{y2}")#The Earth Observation Group Standard
-    print(f"NASA: {y1},{x1},{y2},{x2}")#NASA Standard
+    
+    for i in range(16,21):
+        line = lines[i]
+        pos = line.find("filter=") + 8#pos of quote
+        line = line[:pos] + f"&quot;Lat_GMTCO&quot; > {y1} and  &quot;Lat_GMTCO&quot; &lt; {y2} and  &quot;Lon_GMTCO&quot; > {x1} and  &quot;Lon_GMTCO&quot; &lt; {x2} and " +line[pos:]
+        lines[i]=line
+    
+    with open(tmpStyle,'w') as f:
+        f.writelines(lines)
+    print(f"Trimmed to: {x1},{y1},{x2},{y2}")
     return (y1,x1,y2,x2)
+    
 
 def csvLoad():
-
-    boat = False #Using Boat Rules? This is a VBD standard on my end
     print("Using Path: %s"%path_to_csv)
-
     # Set current directory to path of csv files
     os.chdir(path_to_csv)
     
@@ -54,11 +63,15 @@ def csvLoad():
         lyr = QgsVectorLayer(i[0], i[1], 'delimitedtext')#Make a layer out of it
         if not boat:#load the heat style sheet
             lyr.loadNamedStyle(style)#if you are not using a style remove this
-        
         QgsProject.instance().addMapLayer(lyr)#add layers to QGIS
         
     print("Got %i Files"%c)#print out how many files we got, just for convenience
 
 
 if __name__ == "__console__":
+    if clipData:
+        trimExtent()
+        style=tmpStyle#tmp file
     csvLoad()
+    if clipData:
+        os.remove(tmpStyle)
