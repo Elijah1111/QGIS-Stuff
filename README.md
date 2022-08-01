@@ -6,6 +6,8 @@ I believe you can use these outside of the QGIS terminal, you just need to impor
 
 BBox should be ready to go for any one.
 
+wmsGrab is currently just a normal python script.
+
 The other two scripts are specialized to my uses, hopefully someone finds them helpful
 
 # Style
