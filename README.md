@@ -23,3 +23,7 @@ The style sheets help visualize the csv data I typically use. Feel free to use t
 Youll notice refrences to Earth Observation Group(EOG) all over these scripts.
 I work for there as a researcher, we make datasets of Night time flaring and other light emmitting sources.
 Check them out [here](https://payneinstitute.mines.edu/eog/).
+
+# Thanks
+Thanks to the GIS Stack Exchange for teaching me what I am doing.
+Find them [here](https://gis.stackexchange.com/).
