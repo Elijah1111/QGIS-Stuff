@@ -14,7 +14,6 @@ I believe you can use these outside of the QGIS terminal, you just need to impor
 
 
 
-The other two scripts are specialized to my uses, hopefully someone finds them helpful
 
 # Style
 The style sheets help visualize the csv data I typically use. Feel free to use them if they are helpful
